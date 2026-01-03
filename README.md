@@ -22,7 +22,4 @@ The project is built with a modular structure for scalability:
 - **Visualization:** stmol, py3Dmol
 - **Environment:** Python 3.12, python-dotenv
 
-## 🚀 Getting Started
-1. Clone the repo:
-   ```bash
-   git clone [https://github.com/your-username/matnexus.git](https://github.com/your-username/matnexus.git)
+
