@@ -3,3 +3,6 @@ google-genai
 pymatgen
 python-dotenv
 pillow
+stmol 
+py3Dmol
+ipython-genutils

@@ -1,50 +1,40 @@
 import streamlit as st
-from google import genai
 from PIL import Image
-from pymatgen.core import Structure
-from pymatgen.io.cif import CifParser
 import io
 
+# Import your custom components
+from component.gemini_client import get_gemini_client, process_uploaded_pdfs
+from component.visualizer import render_crystal
+from component.physics_engine import analyze_structure # Moved to top for cleanliness
+
 # 1. Page Configuration
-st.set_page_config(page_title="MatNexus", layout="wide")
-st.title(" MatNexus: Lab-Bench Debugger")
+st.set_page_config(page_title="MatNexus", layout="wide", page_icon="🔬")
+st.title("🔬 MatNexus: Lab-Bench Debugger")
 
-# Sidebar for API Key
-api_key = st.sidebar.text_input("Gemini API Key", type="password")
+# 2. Initialize Client from Component
+client = get_gemini_client()
 
-if api_key:
-    try:
-        client = genai.Client(api_key=api_key)
-        
+if client:
+    tab1, tab2 = st.tabs(["🔬 Lab Debugger", "📚 Literature Miner"])
+
+    # --- TAB 1: XRD/SEM DIAGNOSTIC ---
+    with tab1:
         uploaded_file = st.file_uploader("Upload XRD/SEM Image", type=["jpg", "png"])
-
         if uploaded_file:
             image = Image.open(uploaded_file)
             st.image(image, caption="Experimental Data", width=400)
 
             if st.button("Run Diagnostic"):
-                with st.spinner("Gemini 3 is analyzing the crystal structure..."):
-                    
-                    prompt = """
-                    You are a Senior Materials Scientist.
-                    1. Identify the crystal phase and any impurity peaks in this plot.
-                    2. Explain the physics (e.g., peak broadening, lattice strain).
-                    3. Provide a valid .CIF (Crystallographic Information File) for this material.
-                       Ensure the CIF block starts with 'data_' and is inside a code block.
-                    """
-                    
+                with st.spinner("Gemini 3 is analyzing..."):
+                    prompt = "Identify the crystal phase and provide a valid .CIF block starting with 'data_'."
                     response = client.models.generate_content(
                         model="gemini-3-flash-preview", 
                         contents=[prompt, image]
                     )
-                    
                     st.markdown(response.text)
-
-                    # LOGIC: Extract the CIF file and run Pymatgen Analysis
+                    
+                    # --- FIXED: CIF EXTRACTION & DASHBOARD (Must be inside the button logic) ---
                     if "data_" in response.text:
-                        st.divider()
-                        
-                        # Extract CIF string from the markdown code block
                         parts = response.text.split("```")
                         cif_data = ""
                         for p in parts:
@@ -53,39 +43,41 @@ if api_key:
                                 break
                         
                         if cif_data:
-                            # Feature 1: Download Button
-                            st.subheader("Download Crystal Structure")
-                            st.download_button(
-                                label="Download .CIF File",
-                                data=cif_data,
-                                file_name="structure_output.cif",
-                                mime="text/plain"
-                            )
-
-                            # Feature 2: Automated Physical Property Analysis
-                            try:
-                                parser = CifParser.from_str(cif_data) #
-                                structure = parser.get_structures()[0]
-
-                                st.subheader("Automated Material Analysis")
-                                col_a, col_b, col_c = st.columns(3) #
-                                
-                                with col_a:
-                                    st.metric("Density", f"{structure.density:.2f} g/cm³") #
-                                with col_b:
-                                    st.metric("Volume", f"{structure.volume:.2f} Å³") #
-                                with col_c:
-                                    st.metric("Space Group", f"{structure.get_space_group_info()[0]}") #
-
-                                st.success(f"Verified Composition: {structure.composition.reduced_formula}")
+                            st.divider()
+                            col_left, col_right = st.columns([1, 1])
                             
-                            except Exception as sim_err:
-                                st.warning(f"Note: Scientific verification skipped. {sim_err}")
+                            with col_left:
+                                st.subheader("📦 Download & Metrics")
+                                st.download_button("Download .CIF", data=cif_data, file_name="sample.cif")
+                                
+                                # Run Physics Analysis
+                                try:
+                                    results = analyze_structure(cif_data)
+                                    if "error" not in results:
+                                        st.metric("Density", f"{results['density']:.2f} g/cm³")
+                                        st.metric("Volume", f"{results['volume']:.2f} Å³")
+                                        st.metric("Space Group", results['space_group'])
+                                except Exception as e:
+                                    st.error(f"Analysis failed: {e}")
 
-    except Exception as e:
-        if "429" in str(e):
-            st.error("Rate limit reached. Please wait 60 seconds.")
-        else:
-            st.error(f"An error occurred: {e}")
+                            with col_right:
+                                st.subheader("🧊 3D Unit Cell")
+                                render_crystal(cif_data)
+
+    # --- TAB 2: LITERATURE MINER ---
+    with tab2:
+        st.header("Research Knowledge Miner")
+        pdf_files = st.file_uploader("Upload Research Papers", type="pdf", accept_multiple_files=True)
+        
+        if pdf_files and st.button("🚀 Mine Knowledge"):
+            with st.spinner("Processing PDFs through Gemini Files API..."):
+                gemini_files = process_uploaded_pdfs(client, pdf_files)
+                mining_prompt = "Extract a Markdown comparison table from these papers."
+                
+                response = client.models.generate_content(
+                    model="gemini-3-flash-preview",
+                    contents=[*gemini_files, mining_prompt]
+                )
+                st.markdown(response.text)
 else:
-    st.info("Please enter your API key in the sidebar.")
+    st.warning("⚠️ GEMINI_API_KEY not found. Please check your .env file.")
