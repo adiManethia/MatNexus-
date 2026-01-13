@@ -6,4 +6,4 @@ pillow
 stmol 
 py3Dmol
 ipython-genutils
-mpi-api
+mp-api
