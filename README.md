@@ -1,4 +1,4 @@
-# ⚛️ MatNexus | Computational Materials Hub
+# ⚛️ MatNexus | Computational Materials Hub - (https://matnexusv1.streamlit.app/)
 **AI-Driven Phase Identification & Autonomous Discovery Loop**
 
 MatNexus is a professional Materials Informatics platform designed to bridge the gap between raw laboratory characterization and physical reality. By combining the **Gemini 3 Flash** vision-language model with established physics engines like **Pymatgen**, MatNexus provides a validated "Digital Twin" of materials in seconds.
