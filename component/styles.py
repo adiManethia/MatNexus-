@@ -3,45 +3,61 @@ import streamlit as st
 def apply_custom_css():
     st.markdown("""
     <style>
-    /* Main Background */
+    /* 1. Softer Background - Deep Slate instead of Pure Black/Blue */
     .stApp {
-        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        color: #e0e0e0;
+        background: #121417; 
+        color: #D1D5DB;
     }
     
-    /* Glassmorphism Containers */
-    [data-testid="stVerticalBlock"] > div:has(div.stExpander), .stMetric {
-        background: rgba(255, 255, 255, 0.03) !important;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(0, 255, 204, 0.2) !important;
-        border-radius: 15px !important;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    /* 2. Softened Containers - Reducing Contrast Strain */
+    [data-testid="stVerticalBlock"] > div:has(div.stExpander), 
+    [data-testid="stMetricWidget"], 
+    div[data-testid="stForm"],
+    .st-emotion-cache-12w0qpk {
+        background: #1c1f24 !important;
+        border: 1px solid #2d333b !important;
+        border-radius: 12px !important;
+        padding: 20px;
     }
 
-    /* Neon Accents */
+    /* 3. Emerald Accents - Easier on the eyes than Neon Cyan */
     h1, h2, h3 {
-        color: #00ffcc !important;
-        font-family: 'Courier New', Courier, monospace;
-        text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        color: #50C878 !important; /* Emerald Green */
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.02em;
     }
 
-    /* Primary Button Style */
+    /* 4. Refined Buttons - Emerald to Forest Gradient */
     .stButton > button {
-        background: linear-gradient(45deg, #00ffcc, #0099ff) !important;
-        color: black !important;
-        font-weight: bold !important;
+        background: linear-gradient(135deg, #50C878, #3e9c5d) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
         border: none !important;
-        border-radius: 20px !important;
-        transition: 0.3s all;
+        border-radius: 8px !important;
+        height: 3em;
+        transition: all 0.2s ease;
     }
+    
     .stButton > button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
+        background: #50C878 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(80, 200, 120, 0.3);
     }
 
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] {
-        background-color: rgba(0, 0, 0, 0.4) !important;
+    /* 5. Metrics Styling */
+    [data-testid="stMetricValue"] {
+        color: #50C878 !important;
+    }
+
+    /* 6. Tabs Styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #1c1f24;
+        border-radius: 4px 4px 0 0;
+        color: #9CA3AF;
     }
     </style>
     """, unsafe_allow_html=True)
