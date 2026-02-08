@@ -1,56 +1,98 @@
-# ⚛️ MatNexus: Autonomous Materials Discovery Hub
-**Bridging Experimental Morphology with Quantum Crystallography**
+# ⚛️ MatNexus | Computational Materials Hub
+**AI-Driven Phase Identification & Autonomous Discovery Loop**
 
-MatNexus is a multimodal Materials Informatics platform that transforms raw laboratory data (XRD/SEM) into physics-validated "Digital Twins". By leveraging the **Gemini 3 Flash** multimodal engine and the **Materials Project API**, it reduces the materials-to-market timeline by automating the identification, verification, and simulation of new compounds.
+MatNexus is a professional Materials Informatics platform designed to bridge the gap between raw laboratory characterization and physical reality. By combining the **Gemini 3 Flash** vision-language model with established physics engines like **Pymatgen**, MatNexus provides a validated "Digital Twin" of materials in seconds.
 
 ---
 
 ## 🚀 The MatNexus Edge
 | Feature | Traditional Lab Workflow | MatNexus AI Workflow |
 | :--- | :--- | :--- |
-| **Phase ID Time** | 2–6 Hours (Manual Search) | **< 30 Seconds** (Automated) |
+| **Phase ID Time** | 2–6 Hours (Manual Search) | **< 30 Seconds** (Vision AI) |
 | **Data Correlation** | Manual overlap of XRD/SEM | **Multimodal Synthesis** |
-| **Verification** | Manual journal lookup | **Materials Project API** |
+| **Verification** | Manual journal lookup | **Materials Project API Grounding** |
 | **Decision Making** | Trial & Error synthesis | **Autonomous Loop Advice** |
 
 ---
 
-## 🛠️ Core Modules
+## 🛠️ Core Workstations
 
-### 1. 🔬 Multimodal Lab Debugger
-The Vision Engine performs cross-correlation between uploaded XRD patterns and SEM micrographs:
+### 1. 🔍 Lab Debugger (The Discovery Engine)
+The engine performs cross-correlation between uploaded XRD patterns and SEM micrographs:
 * **Crystallography:** Identifies Phase, Space Group, and Lattice Parameters.
-* **Morphology:** Extracts grain size and shape, correlating them with Scherrer peak broadening.
-* **CIF Generation:** Exports standardized 3D structural files (.CIF) automatically.
+* **Morphology:** Extracts grain size and habit, correlating physical observations with peak broadening.
+* **CIF Generation:** Automatically exports standardized 3D structural files (.CIF) for simulation.
+* **Physics Validation:** Real-time benchmarking against the **Materials Project** to detect lattice discrepancies.
 
-
-
-### 2. ⚛️ Quantum Discovery (AI-DFT Proxy)
-MatNexus predicts the electronic nature of your sample before you run a single supercomputer simulation:
-* **Band Gap Prediction:** Estimates $E_g$ (eV) and electronic nature (Metal/Semiconductor) based on identified symmetry.
-* **3D Visualization:** Real-time 3D unit cell rendering using `py3Dmol`.
-
-
-
-### 3. 🤖 Autonomous Synthesis Loop
-The engine detects discrepancies between your experimental data and the **Materials Project** ground truth.
-* **Correction Logic:** If density or lattice deviations are high, the system issues an "Autonomous Command" (e.g., "Increase sintering time by 20%") to stabilize the target phase.
-
-
-
-### 4. 📚 Literature Miner
-Utilizes Gemini's 1M+ token context window to index multiple research PDFs. It extracts property tables and compares your lab results with global literature in seconds.
+### 2. 📚 Literature Miner (Knowledge Extraction)
+Utilizes Gemini’s 1M+ token context window to index multiple research PDFs simultaneously.
+* **Automated Extraction:** Converts dense PDF text into structured property tables.
+* **Cross-Referencing:** Compares your current lab results with global peer-reviewed standards.
 
 ---
 
-## 🏗️ Project Architecture
-- `app.py`: Streamlit interface with Glassmorphism UI and Multimodal logic.
-- `component/mp_client.py`: Real-time grounding via the Materials Project API.
-- `component/physics_engine.py`: Scientific computation using Pymatgen.
-- `component/simulator.py`: Synthetic XRD plot generation for peak matching.
-- `component/reporter.py`: Automated Research Brief generation with LaTeX support.
+## 🧬 Scientific Foundations
+
+### 📡 X-Ray Diffraction (XRD)
+MatNexus analyzes diffraction patterns by measuring constructive interference of X-rays scattered by crystal lattice planes, governed by **Bragg's Law**:
+$$n\lambda = 2d \sin \theta$$
 
 
+### 🔬 Scanning Electron Microscopy (SEM)
+By mapping surface topography via focused electron beams, the system correlates physical grain habit with the internal crystallographic unit cell.
+
+
+---
+
+## 🚀 Workstation Capabilities
+* **💎 Structural Modeling:** Automated .CIF generation, 3D Unit Cell rendering, and Symmetry analysis.
+* **🔬 Physics Validation:** Materials Project API sync, Density benchmarking, and Theoretical XRD simulation.
+* **⚡ Property Discovery:** Band Gap estimation ($E_g$), Electronic nature prediction, and Autonomous synthesis advice.
+
+---
+
+## 🏗️ System Architecture
+* `app.py`: Main entry point with **Hub-and-Spoke** state-based navigation and a "Scientific Environment" loading screen.
+* `component/styles.py`: Custom **Emerald & Slate** Glassmorphism UI (Eye-friendly dark mode).
+* `component/physics_engine.py`: Scientific computation using **Pymatgen**.
+* `component/mp_client.py`: Real-time grounding via the **Materials Project API**.
+* `component/simulator.py`: Synthetic XRD plot generation for experimental peak matching.
+
+---
+
+## 📂 Project Structure
+```text
+MatNexus/
+├── app.py                # Core Streamlit application
+├── component/            # Modular scientific & UI logic
+│   ├── gemini_client.py  # Gemini 3 Flash Multimodal API
+│   ├── physics_engine.py # Crystallography calculations
+│   ├── styles.py         # Refined Emerald & Slate CSS
+│   └── visualizer.py     # 3D Lattice rendering
+├── data/
+│   ├── assets/           # UI Icons and XRD/SEM Schematics
+│   ├── lab_samples/      # Sample XRD/SEM images
+│   └── reference_papers/ # Sample research PDFs for mining
+└── requirements.txt      # Project dependencies
+``` 
+
+## Setup & repository
+
+1. Clone the repository:
+```bash
+git clone https://github.com/adiManethia/MatNexus-.git
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+3. Configure API Keys: Add your API keys to the .env file
+
+4. Run the application:
+```bash
+streamlit run app.py
+```
 
 ## 🛠️ Tech Stack
 * **AI Model:** Google Gemini 3 Flash (Multimodal)
